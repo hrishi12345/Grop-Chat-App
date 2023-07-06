@@ -19,6 +19,7 @@ function Login(props) {
 
       if (response.status === 201) {
         alert("User Login successfully");
+        localStorage.setItem('token', response.data.token);
         navigate("/homepage"); // Programmatically navigate to "/homepage"
       }
     } catch (error) {
