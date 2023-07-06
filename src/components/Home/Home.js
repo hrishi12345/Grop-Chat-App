@@ -15,19 +15,32 @@ function Home(props) {
       setIsSendClicked(true);
     }
   };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:3001/message/getmessage', { headers: { "Authorization": token } });
-        console.log(response.data.data);
-        setMessages(response.data.data)
+        console.log(response.data);
+        const messagesArray = response.data.data;
+        setMessages(messagesArray);
       } catch (error) {
         console.log('Error while fetching the data:', error);
       }
     };
   
+    // Fetch initial messages
     fetchData();
+  
+    // Periodically fetch new messages every 5 seconds (adjust the interval as needed)
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000);
+  
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
   
   useEffect(() => {
@@ -63,11 +76,15 @@ function Home(props) {
       />
       <button onClick={sendMessage}>Send</button>
 
-      <ul>
-        {messages.map((message, index) => (
-          <li key={index}>hrishi: {message.content}</li>
-        ))}
-      </ul>
+      {messages.length === 0 ? (
+        <p>No messages</p>
+      ) : (
+        <ul>
+          {messages.map((message, index) => (
+            <li key={index}>hrishi: {message.content}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
