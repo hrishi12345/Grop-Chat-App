@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Home(props) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isSendClicked, setIsSendClicked] = useState(false); // New state variable
+  const navigate=useNavigate()
 
   const sendMessage = () => {
     if (newMessage.trim() !== '') {
@@ -75,7 +77,7 @@ function Home(props) {
         onChange={handleMessageChange}
       />
       <button onClick={sendMessage}>Send</button>
-
+       <button onClick={()=>{navigate('/group')}}>Create group</button>
       {messages.length === 0 ? (
         <p>No messages</p>
       ) : (
